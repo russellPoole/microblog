@@ -61,3 +61,15 @@ The directory should appear as follows:
 Navigate to `http://127.0.0.1:5000/`, `http://127.0.0.1:5000/index`, or `http://localhost:5000/` in your browser to see the Flask application running locally.
 
 Pres `Ctrl + C` to stop the web server.
+
+## Git Add, Commit, Status, and Push
+
+Save all files being worked on. Run `git status` to see all tracked files that have been updated. You should see each of the files you created for the application.
+
+Run `git add *` to add all of these files to the HEAD for commit.
+
+Run `git commit -m "Message to indicate the contents of the commit."`
+
+Run `git push origin master` to push the changes to the GitHub repository.
+
+All new files should now be present in the GitHub repository. Running `git status` should indicate that there are no changed files.
