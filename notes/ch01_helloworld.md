@@ -44,11 +44,11 @@ Finally, in the top level (up one), create `microblog.py`, which will define the
 
 The directory should appear as follows:
 `microblog/`<br>
-`   venv/`<br>
-`   app/`<br>
-`     __init__.py`<br>
-`     routes.py`<br>
-`   microblog.py`
+&nbsp;&nbsp;`venv/`<br>
+&nbsp;&nbsp;`app/`<br>
+&nbsp;&nbsp;&nbsp;&nbsp;`__init__.py`<br>
+&nbsp;&nbsp;&nbsp;&nbsp;`routes.py`<br>
+&nbsp;&nbsp;`microblog.py`
 
 ## Export Environment Variable
 
