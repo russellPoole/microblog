@@ -43,7 +43,7 @@ You also need to create `app/routes.py`, which is referenced by `__init__.py`
 Finally, in the top level (up one), create `microblog.py`, which will define the Flask application instance.
 
 The directory should appear as follows:
-`microblog/`<br>
+<br>`microblog/`<br>
 &nbsp;&nbsp;`venv/`<br>
 &nbsp;&nbsp;`app/`<br>
 &nbsp;&nbsp;&nbsp;&nbsp;`__init__.py`<br>
