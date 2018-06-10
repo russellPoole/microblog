@@ -24,6 +24,9 @@ Chapter 01
 
 ### Route Pattern to Display Forms
 
+`from flask import render_template, flash, redirect, url_for`
+<br>`from app.forms import FormClassName`
+<br>`...`
 <br>`@app.route('/<route>', methods=['GET', 'POST'])`
 <br>`def <view_function>():`
 <br>&nbsp;&nbsp;&nbsp;&nbsp;`form = <FormClassName>()`
