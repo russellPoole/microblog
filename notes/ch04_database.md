@@ -93,7 +93,7 @@ Ensure that the `FLASK_APP` environment variable is set (in this case, to `micro
 
 - This will generate the first migration, which is a set of instructions to generate the users table that will map to the `User` database model.
 - Alembic can create this migration automatically, and will automatically populate the migration script with changes needed to the database schema to match the application models.
-- Because there is no previous database in this case, the automatic migratino will add the entire User model to the migration script.
+- Because there is no previous database in this case, the automatic migration will add the entire User model to the migration script.
 - Subsequent migrations may just be adding or removing a column, thereby only modifying the schema.
 - The generated script is now part of the project and must remain with source control.
 - The generated script has two functions: `upgrade()` and `downgrade()`
@@ -240,3 +240,12 @@ Using the Python shell is very helpful during the development of your applicatio
 We can enter the shell with the full context of the application by using `flask shell`. This is the exact same as loading the application for use through a web browser, but swapping the UI for the interpreter.
 
 We still need to add a function to `microblog.py` to register the items returned by it in the shell session.
+
+```python
+from app import app, db
+from app.models import User, Post
+
+@app.shell_context_processor
+def make_shell_context():
+    return {'db': db, 'User': User, 'Post': Post}
+```
