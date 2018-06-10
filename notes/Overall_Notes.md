@@ -37,3 +37,16 @@ def <view_function>():
         return redirect(url_for('<target_view_function>')
     return render_template('<form_template>.html', title='<form page title>', form=form)
 ```
+
+### Adding New Models
+
+### Database Migration
+
+Ensure that the `FLASK_APP` environment variable is set (in this case, to `microblog.py`)
+
+1. `(venv) $ flask db init` will create the first instance of the database
+    - This will create a new migrations directory with instructions necessary for Alembic to migrate the database schema via SQL commands
+    - This migrations directory MUST be tracked in source control – it contains all of the successive instructions to assemble the database to a particular state
+2. `(venv) $ flask db migrate -m "<migration message>"`
+3. `(venv) $ flask db upgrade`
+    - `(venv) $ flask db downgrade` can be used to remove the migration
