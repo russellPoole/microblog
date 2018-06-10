@@ -1,7 +1,5 @@
 Overall_Notes.md
 
-Chapter 01
-
 ### Run the application:
 
 1. Set environment variable `FLASK_APP=microblog.py`
