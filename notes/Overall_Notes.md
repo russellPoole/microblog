@@ -20,7 +20,7 @@ Overall_Notes.md
 ### Form Addition Order
 
 1. **`app/forms.py`** Import necessary form field types, imporrt necessary validators, create new form class with each form field as a class variable. 
-2. **`app/templates<form_page>.html`** Create / modify form template to interact with newly-created Form class in step 1. This template will receive the above Form class as a variable during rendering.
+2. **`app/templates/<form_page>.html`** Create / modify form template to interact with newly-created Form class in step 1. This template will receive the above Form class as a variable during rendering.
 3. **`app/routes.py`** Import the new Form class form `app.forms`. Add / modify a view function that will render the template referenced in step 2. Upon successful submission, you will likely want to redirect to a different route bu returning `redirect(url_for('<view_function>'))`
 
 ### Route Pattern to Display Forms
@@ -73,7 +73,7 @@ Column Options (not applicable to all column types)
 * `index=[]`
 * `unique=[]`
 * `default=[datetime.utcnow]`
-* `db.ForeignKey('<table_name>.<column_name>')
+* `db.ForeignKey('<table_name>.<column_name>')`
 
 
 ### Database Migration
