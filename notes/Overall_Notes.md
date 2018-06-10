@@ -40,7 +40,9 @@ def <view_function>():
 
 ### Adding New Models
 
-TODO
+* Add model to `app/models.py`
+* Import model into `microblog.py` from `app.models`
+* When ready, perform database migrations to reflect model in the database
 
 ### Model Pattern
 
@@ -86,3 +88,43 @@ Ensure that the `FLASK_APP` environment variable is set (in this case, to `micro
 2. `(venv) $ flask db migrate -m "<migration message>"`
 3. `(venv) $ flask db upgrade`
     - `(venv) $ flask db downgrade` can be used to remove the migration
+
+
+### Querying the Database via Models
+
+```python
+>>> all_elements_of_a_class = <ModelName>.query.all()
+>>> element_of_id_<n>_of_a_class = <ModelName>.query.get(<n>)
+```
+
+If an instance of a model is to be referenced as a foreign key in another model, it can be expressed as so:
+
+```python
+>>> foreign_key_element = OneModel.query.get(<n>)
+>>> many_model_element = ManyModel(variable='value', foreign_key=foreign_key_element)
+>>> db.session.add(many_model_element)
+>>> db.session.commit()
+```
+
+### Shell Context
+
+To make objects such as models and the database available in the shell context, we need to register these items in the root [`microblog.py`] application:
+
+```python
+from app import app, db
+from app.models import Model1, Model2
+
+@app.shell_context_processor
+def make_shell_context():
+    return {'db': db, 'Model1': Model1, 'Model2': Model2}
+```
+
+```python
+(venv) $ flask shell
+>>> db
+<SQLAlchemy engine=sqlite:////Users/<username>/dev/microblog/app.db>
+>>> Model1
+<class 'app.models.Model1'>
+>>> Model2
+<class 'app.models.Model2'>
+```

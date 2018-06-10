@@ -145,3 +145,98 @@ Migrate and Upgrade the Database to now include the new posts table.
 
 * `(venv) $ flask db migrate -m "posts table"`
 * `(venv) $ flask db upgrade`
+
+### Database Operations via Python Interpreter
+
+By opening a `python` interpeter session, we can interact directly with the data through the models in the application.
+
+```python
+>>> from app import db
+>>> from app.models import User, Post
+>>> u = User(username='john', email='john@example.com')
+>>> db.session.add(u)
+>>> db.session.commit()
+```
+
+The above session will create a new instance of the User class. Once defined, we can use `db.session.add()` and `db.session.commit()` to prepare data for the database and commit our changes.
+
+Add another and commit another user, Susan, using the same variable `u`, which will replace any notion of John in the interpreter instance.
+
+Now let's run a query on the database that will return all (two) users we have added so far. We'll do this through the model we created in the application.
+
+```python
+>>> users = User.query.all()
+>>> users
+[<User john>, <User Susan>]
+>>> for u in users:
+...     print(u.id, u.username, u.email)
+...
+1 john john@example.com
+2 Susan susan@example.com
+```
+
+All models have the `query` attribute, and the most basic query is one that returns all elements of a particular class: `all()`.
+
+Another way to query is on the `id` of a user, if known:
+
+```python
+>>> u = User.query.get(1)
+>>> u
+<User john>
+```
+
+Now we can add a blog post that is authored by user with `id` = 1. We can do so by referencing the element returned to variable u instead of needing to specify a particular user id.
+
+```python
+>>> u = User.query.get(1)
+>>> p = Post(body='my first post!', author=u)
+>>> db.session.add(p)
+>>> db.session.commit()
+```
+
+SQLAlchemy provides a nice high-level abstraction above relationships, keys, etc.
+
+Some fun to show this in action:
+```python
+# get all posts written by a user
+>>> u = User.query.get(1)
+>>> u
+<User john>
+>>> posts = u.posts.all()
+>>> posts
+[<Post my first post!>]
+
+# same but with a user that has no posts
+>>> u = User.query.get(2)
+>>> u
+<User Susan>
+>>> u.posts.all()
+>>> []
+
+# get all users in revers alphabetical order
+>>> User.query.order_by(User.username.desc()).all()
+[<User john>, <User Susan>]
+
+# stage all users for deletion from the database
+>>> users = User.query.all()
+>>> for u in users:
+...     db.session.delete(u)
+...
+
+# stage all posts for deletion from the database
+>>> users = Post.query.all()
+>>> for p in posts:
+...     db.session.delete(p)
+...
+
+# commit staged deletion of users, posts
+>>> db.session.commit()
+```
+
+### Shell Context
+
+Using the Python shell is very helpful during the development of your application. Having to repeat certain imports every time you enter the shell is tedious and error-prone.
+
+We can enter the shell with the full context of the application by using `flask shell`. This is the exact same as loading the application for use through a web browser, but swapping the UI for the interpreter.
+
+We still need to add a function to `microblog.py` to register the items returned by it in the shell session.
