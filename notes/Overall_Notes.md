@@ -40,6 +40,42 @@ def <view_function>():
 
 ### Adding New Models
 
+TODO
+
+### Model Pattern
+
+```python
+class <OneModelName>(db.Model):
+    column_name_1 = db.Column(db.<ColumnType>, [options])
+    ...
+    one_many_relationship_column = db.relationship('ManyModelName', backref='<reference name as variable from other model>')
+
+    def __repr__(self):
+        return 'text representation {}'.format(self.column_name_n)
+
+class <ManyModelName>(db.Model):
+    column_name_1 = db.Column(db.<ColumnType>, [options])
+    parent_relationship_column = db.Column(db.<ColumnType>, db.ForeignKey('onemodelname.column_name_1'))
+
+    def __repr__(self):
+        return 'text representation {}'.format(self.column_name_n)
+```
+
+ColumnTypes
+
+* `db.Integer`
+* `db.String(<length>)`
+* `db.DateTime`
+
+Column Options (not applicable to all column types)
+
+* `primary_key=[]`
+* `index=[]`
+* `unique=[]`
+* `default=[datetime.utcnow]`
+* `db.ForeignKey('<table_name>.<column_name>')
+
+
 ### Database Migration
 
 Ensure that the `FLASK_APP` environment variable is set (in this case, to `microblog.py`)
