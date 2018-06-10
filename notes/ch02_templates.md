@@ -26,7 +26,7 @@ The Jinja template language allows for conditionals to be evaluated at the time 
 
 Lists can be passed as arguments to the template rendering function, which can be evaluated sequentially at the time of rendering.
 
-<br>`{% for item in itmes %}`
+<br>`{% for item in items %}`
 <br>`<p> {{ item.attribute1 }} {{ item.attribute2 }}</p>`
 <br>`{% endofr %}`
 
