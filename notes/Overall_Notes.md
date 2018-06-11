@@ -38,6 +38,64 @@ def <view_function>():
     return render_template('<form_template>.html', title='<form page title>', form=form)
 ```
 
+### User Login Pattern
+
+**`__init__.py`**
+```python
+from flask_login import LoginManager
+# ...
+app = Flask(__name__)
+# ...
+login = LoginManager(app)
+# Let Flask-Login know whch view function handles logins (to be refernced by @login_required decorator)
+login.login_view = 'login'
+```
+
+**`app/models.py`**
+```python
+from app import login
+from flask_login import UserMixin
+...
+class User(UserMixin, db.Model):
+# ...
+```
+
+**`app/routes.py`**
+```python
+from flask import render_template, flash, redirect, url_for
+from app import app
+from app.forms import LoginForm
+from flask_login import current_user, login_user, logout_user, login_required
+from app.models import User
+
+# ...
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # If user is already logged in, don't show /login screen
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        # Load user from database
+        user = User.query.filter_by(username=form.username.data).first()
+        # If user is not found, OR their supplied password doesn't validate,
+        # redirect them to the /login screen and flash the error message
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        # if user successfully loads, execute the login_user function,
+        # along with the boolean for remembering them beyond their browser
+        # session
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        # Finally, redirect logged in user to the index page
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
+```
+
 ### Adding New Models
 
 * Add model to `app/models.py`
@@ -128,3 +186,18 @@ def make_shell_context():
 >>> Model2
 <class 'app.models.Model2'>
 ```
+
+### Extensions
+
+`(venv) $ pip install <extension name>`
+
+In `app/__init__.py`, initialize the newly-installed extension:
+
+```python
+from <flask_extension> import <ExtensionName>
+
+app = Flask(__name__)
+# ...
+<extension> = ExtensionName(app)
+
+# ...
